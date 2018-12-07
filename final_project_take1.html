@@ -1,0 +1,141 @@
+<html>
+
+  <head>
+      <title>Tom Barry Final Project</title>
+  <body>
+        <p>Welcome to my program interface. This program uses a database of information about my
+          recent chess games. It starts by calculating my current winning percentage.
+          Then you can use the form to filter the games used in calculating the winning percentage.
+          You can fill in all or none of the fields. Then hit calculate!
+        <form>
+          Color: <select id="mycolor"><option value="NULL">--</option><option value="White">White</option><option value="Black">Black</option></select>
+          First Move: <select id="myfirstMove"><option value="NULL">--</option><option value="d4">d4</option><option value="e4">e4</option><option value="c4">c4</option><option value="Nf3">Nf3</option></select>
+          Number of Moves: <select id="myNumberMoves"><option value="NULL">--</option><option value="1">1-15</option><option value="2">16-25</option><option value="3">26-35</option><option value="4">36-45</option><option value="5">Over 45</option></select>
+          Time Used(minutes:seconds): <select id="myTimeUsed"><option value="NULL">--</option><option value="1">0 - 4:59</option><option value = "2">5:00 - 9:59</option><option value="3">10:00 - 14:59</option><option value="4">15:00 - 20:00</option><option value="5">Over 20</option></select>
+          Opponent Rating: <select id="myOpponentRating"><option value="NULL">--</option><option value="Higher">Higher than my rating</option><option value = "Lower">Lower or Equal to my rating</option></select>
+        </form>
+        <button onclick="calculate()">Calculate</button>
+
+
+
+      <div id="results">
+
+        </div>
+
+  </body>
+
+  <script language="javascript">
+
+
+    function createQuery ()
+    {
+      let query = "SELECT *From chessgames WHERE";
+      let color = document.getElementById("mycolor").value;
+      let move = document.getElementById("myfirstMove").value;
+      let num_moves = document.getElementById("myNumberMoves").value;
+      let time_used = document.getElementById("myTimeUsed").value;
+      let rating = document.getElementById("myOpponentRating").value;
+      let colorq = "";
+      let moveq = "";
+      let numq = "";
+      let timeq = "";
+      let ratingq = "";
+
+      if (color != NULL)
+      {
+        if(color === "White")
+        {
+          colorq = "color_id = 1";
+        }
+        else {
+          colorq = "color_id = 2";
+        }
+      }
+      if(move != NULL)
+      {
+        moveq = "first_move = " + move;
+      }
+      if(num_moves != NULL)
+      {
+          if(num_moves === 1)
+          {
+            numq = "move_count < 16";
+          }
+          if(num_moves === 2)
+          {
+            numq = "move_count > 15 AND move_count < 26";
+          }
+          if(num_moves === 3)
+          {
+            numq = "move_count > 25 AND move_count < 36";
+          }
+          if(num_moves === 4)
+          {
+            numq = "move_count > 35 AND move_count < 46";
+          }
+          if(num_moves === 5)
+          {
+            numq = "move_count > 45";
+          }
+      }
+
+      if(time_used != NULL)
+      {
+        if(time_used === 1)
+        {
+            timeq = "time_used < 300";
+        }
+        if(time_used === 2)
+        {
+            timeq = "time_used > 299 AND time_used < 600";
+        }
+        if(time_used === 3)
+        {
+            timeq = "time_used > 599 AND time_used < 900";
+        }
+        if(time_used === 4)
+        {
+            timeq = "time_used > 899 AND time_used < 1200";
+        }
+        if(time_used === 5)
+        {
+          timeq = "time_used > 1199";
+        }
+
+      }
+
+      if(rating != NULL)
+      {
+          if(rating === "Higher")
+          {
+            ratingq = "opponent_rating > my_rating";
+          }
+          else {
+
+            ratingq = "my_rating > opponent_rating";
+          }
+
+      }
+
+      query += " AND " + colorq + " AND " + moveq + " AND " + numq + " AND " + timeq + " AND " + ratingq + ";"
+
+    }
+
+
+    function calculate()
+    {
+      let color = document.getElementById("mycolor").value;
+      let move = document.getElementById("myfirstMove").value;
+      let num_moves = document.getElementById("myNumberMoves").value;
+      let time_used = document.getElementById("myTimeUsed").value;
+      let rating = document.getElementById("myOpponentRating").value;
+
+
+      document.getElementById("results").innerHTML = "Test Value:" + test_print;
+    }
+
+
+
+  </script>
+
+</html>
